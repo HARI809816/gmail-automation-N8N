@@ -1,7 +1,6 @@
-# gmail-automation-N8N
-Automated email campaign workflow that reads recipient data from Google Sheets, selects random email templates, personalizes messages, sends them via Gmail, tracks send status
-
 # Mail Automation Workflow
+
+![Workflow Diagram]()
 
 This n8n workflow automates the process of sending personalized emails to a list of recipients using data from a Google Sheet, with support for multiple email templates and status tracking.
 
