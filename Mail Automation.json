@@ -1,0 +1,471 @@
+{
+  "name": "Mail Automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        240
+      ],
+      "id": "d4b674e3-dbae-4ce4-91c5-8475874571e0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs",
+          "mode": "list",
+          "cachedResultName": "leet sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1280499511,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs/edit#gid=1280499511"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -640,
+        240
+      ],
+      "id": "c9aa0020-ffdb-4509-88a7-4ee19e45db24",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hVdKahECNfNI8bBr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "53c98ae0-59a1-48e4-beb8-f12e28f3dca7",
+              "leftValue": "={{ $json['Send Status'] }}",
+              "rightValue": "SENT",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -432,
+        240
+      ],
+      "id": "8e6651d2-7dad-4e61-a391-8bd2d21ff27d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -208,
+        224
+      ],
+      "id": "d302e359-67f2-4943-8873-925f719b4e50",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs",
+          "mode": "list",
+          "cachedResultName": "leet sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1836833086,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs/edit#gid=1836833086"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a12c052a-5c82-43d2-9b12-15ff28fb369f",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hVdKahECNfNI8bBr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get templates from previous node\nconst templates = items.map(item => item.json);\n\n// Check if templates exist\nif (!templates || templates.length === 0) {\n  throw new Error('No templates found');\n}\n\n// Pick a random template\nconst index = Math.floor(Math.random() * templates.length);\nconst template = templates[index];\n\n// Convert body to HTML\nconst bodyHtml = template.Body.replace(/\\n/g, '<br>');\n\n// Return in n8n-compatible format\nreturn [\n  {\n    json: {\n      subject: template.Subject,\n      body: bodyHtml\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3c00dce2-717d-4cd3-a051-7a1d4cbc5288",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        64,
+        224
+      ],
+      "id": "03a700f3-7c80-45ee-89ea-8de9ba7e47e5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79520e1b-8dd1-4b1c-81e1-29aebccd76d0",
+              "name": "body",
+              "value": "={{ $json.body.replace(\"[name]\", $json[\"Name\"] && $json[\"Name\"].trim() !== '' ? $json[\"Name\"].trim() : \"there\") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        224
+      ],
+      "id": "d0725be2-b47a-4b99-83ce-f6b15829af21",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.body }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Hari"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        400
+      ],
+      "id": "6509d8d5-d1dc-4c13-b1ab-a6483992b4b7",
+      "name": "Send a message",
+      "webhookId": "f260e8f9-5f8b-403f-92d0-9a8b21567f64",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Us7NqZa4TiXnmrCb",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        784,
+        240
+      ],
+      "id": "50a66686-7855-4605-82da-0918e7b33681",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs",
+          "mode": "list",
+          "cachedResultName": "leet sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1280499511,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OX75x0GIs97gFiNQMFzuMzTc58OqrvkFdEdPUkMMaIs/edit#gid=1280499511"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.Email }}",
+            "Send Status": "={{ $json.labelIds[0] }}",
+            "Time": "={{ new Date().toLocaleTimeString(\"en-GB\", { timeZone: \"Asia/Kolkata\", hour12: false }) }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Send Status",
+              "displayName": "Send Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        240
+      ],
+      "id": "8ec09822-ab50-473e-a43e-f9c38be80a7e",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hVdKahECNfNI8bBr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        496
+      ],
+      "id": "5a5bc784-e653-495c-a19f-bfb71c2fba0d",
+      "name": "Wait",
+      "webhookId": "2dd27794-eba0-4d37-b5e8-03b613ba0887"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ecaf7ab6-badf-490f-b5f0-4b5fdc52f7d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5059f03bd7fce2bda1925375f4c07d289d1d60ca9216010e599729d939d0a454"
+  },
+  "id": "xnAtJmqKiRP9fcSd",
+  "tags": []
+}
