@@ -41,7 +41,7 @@ The workflow reads recipient data from a Google Sheet, filters out already sent 
 11. **Append or update row in sheet**: Updates the Google Sheet with send status and timestamp
 12. **Wait**: Adds a delay between email sends to manage rate limits
 
-## Setup Instructions
+## Setup Instructions.
 
 1. **Import the Workflow**:
    - In your n8n instance, go to the Workflows page
