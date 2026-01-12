@@ -44,13 +44,13 @@ The workflow reads recipient data from a Google Sheet, filters out already sent 
 ## Setup Instructions.
 
 1. **Import the Workflow**:
-   - In your n8n instance, go to the Workflows page
-   - Click "Import" and paste the JSON workflow definition
+   - In your n8n instance, go to the Workflows page 
+   - Click "Import" and paste the JSON workflow definition 
 
 2. **Configure Credentials**:
-   - Add your Google Sheets OAuth2 credentials
-   - Add your Gmail OAuth2 credentials
-   - Link these credentials to the respective nodes
+   - Add your Google Sheets OAuth2 credentials 
+   - Add your Gmail OAuth2 credentials 
+   - Link these credentials to the respective nodes 
 
 3. **Update Google Sheet IDs**:
    - Replace the `documentId` in the Google Sheets nodes with your actual Google Sheet IDs
