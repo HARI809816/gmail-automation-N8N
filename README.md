@@ -2,7 +2,7 @@
 
 ![Workflow Diagram](https://github.com/HARI809816/gmail-automation-N8N/blob/320a8fc7b4669d20b1fd8e2bf1c5f53851a671de/Mail%20Automation%20IMG.png)
 
-This n8n workflow automates the process of sending personalized emails to a list of recipients using data from a Google Sheet, with support for multiple email templates and status tracking.
+This n8n workflow automates the process of sending personalized emails to a list of recipients using data from a Google Sheet, with support for multiple email templates and status tracking. 
 
 ## Overview
 
